@@ -40,7 +40,7 @@ body {
 }
 
 main {
-  padding: var(--3xl);
+  padding-bottom: var(--3xl);
 }
 
 .header-container {
