@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Resources</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="shortcut icon" href="images/axe-cursor.png" type="image/x-icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/b43654510d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <section class="resource-game flex justify-center items-center h-[65svh] md:h-[80svh] border border-black m-12">
+        <canvas id="gameboard"
+            class="w-full h-full bg-gradient-to-t from-[#d7b1fb] via-[#c6a0ef] to-[#b490e3]"></canvas>
+    </section>
+
+    <script type="module" src="scripts/modules/header.js"></script>
+    <script type="module" src="scripts/modules/localStorage.js"></script>
+    <script type="module" src="scripts/getting-resources.js"></script>
+</body>
+
+</html>

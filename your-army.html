@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Army</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="shortcut icon" href="images/axe-cursor.png" type="image/x-icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/b43654510d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <main>
+        <section class="w-full text-center">
+            <h2 class="text-3xl font-bold tracking-widest">VIEW CART</h2>
+            <h3 id="worth" class="text-2xl">$ $</h3>
+        </section>
+
+        <h2 class="text-2xl p-4">Clothes</h2>
+        <section class="shop-display grid grid-cols-2 md:grid-cols-4 gap-3 ml-3 mr-3" id="warrior-container">
+            <!-- Items for warriors will go here -->
+        </section>
+
+        <h2 class="text-2xl p-4">Bags</h2>
+        <section class="shop-display grid grid-cols-2 md:grid-cols-4 gap-3 ml-3 mr-3" id="machines-container">
+            <!-- Items for machines will go here -->
+        </section>
+
+        <h2 class="text-2xl p-4">Shoes</h2>
+        <section class="shop-display grid grid-cols-2 md:grid-cols-4 gap-3 ml-3 mr-3" id="animals-container">
+            <!-- Items for animals will go here -->
+        </section>
+    </main>
+
+    <script type="module" src="scripts/modules/header.js"></script>
+    <script type="module" src="scripts/modules/localStorage.js"></script>
+    <script type="module" src="scripts/your-army.js"></script>
+</body>
+
+
+</html>
