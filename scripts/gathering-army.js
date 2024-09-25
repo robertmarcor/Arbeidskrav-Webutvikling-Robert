@@ -1,33 +1,46 @@
 import { clothingsArray } from "./modules/clothes.js";
 import { bagsArray } from "./modules/bags.js";
 import { shoesArray } from "./modules/shoes.js";
-import { ARMY_ARRAY } from "./modules/army.js";
+import { CART_ARRAY } from "./modules/cart.js";
 import {
   ARMY_KEY,
   RESOURCE_KEY,
   saveToStorage,
 } from "./modules/localStorage.js";
 import { RESOURCES } from "./modules/resources.js";
+import { inputContains } from "./utilities/filterUtil.js";
 
-const warriorsContainer = document.getElementById("warrior-container");
-const machinesContainer = document.getElementById("machines-container");
-const animalsContainer = document.getElementById("animals-container");
+const clothingContainer = document.getElementById("warrior-container");
+const shoesContainer = document.getElementById("machines-container");
+const bagsContainer = document.getElementById("animals-container");
+
+const filterInput = document.getElementById("filterInput");
+if (filterInput) {
+  filterInput.addEventListener("input", displayItemsForSale);
+}
 
 const itemsForSale = [
-  { array: clothingsArray, container: warriorsContainer },
-  { array: bagsArray, container: machinesContainer },
-  { array: shoesArray, container: animalsContainer },
+  { array: clothingsArray, container: clothingContainer },
+  { array: bagsArray, container: shoesContainer },
+  { array: shoesArray, container: bagsContainer },
 ];
 
-itemsForSale.forEach(({ array, container }, arrayIndex) => {
-  array.forEach((item, itemIndex) => {
-    let html = "";
-    html += ` 
+function displayItemsForSale() {
+  // Clear previous content
+  clothingContainer.innerHTML = "";
+  shoesContainer.innerHTML = "";
+  bagsContainer.innerHTML = "";
+
+  itemsForSale.forEach(({ array, container }, arrayIndex) => {
+    const filteredItems = array.filter(inputContains);
+    filteredItems.forEach((item, itemIndex) => {
+      let html = "";
+      html += ` 
       <article class="shop-display__card">
         <div class="relative">
           <img src="${item.imageURL}" class="shop-display__card-image" alt="${
-      item.categoryBrand
-    } ${item.categoryName}">
+        item.categoryBrand
+      } ${item.categoryName}">
           <i id="favorite" class="fa-regular fa-heart absolute top-2 right-2"></i>
         </div>
         <h3 class="shop-display__card-brand text-gray-800">${
@@ -43,10 +56,12 @@ itemsForSale.forEach(({ array, container }, arrayIndex) => {
       </article>
     `;
 
-    container.insertAdjacentHTML("beforeend", html);
-    addButtons(item, `buy-${item.identifier}-${arrayIndex}-${itemIndex}`);
+      container.insertAdjacentHTML("beforeend", html);
+      addButtons(item, `buy-${item.identifier}-${arrayIndex}-${itemIndex}`);
+    });
   });
-});
+}
+displayItemsForSale();
 
 function addButtons(item, buttonId) {
   const button = document.getElementById(buttonId);
@@ -63,8 +78,8 @@ function buyItem(item) {
     RESOURCES.gold -= item.priceGold;
     saveToStorage(RESOURCE_KEY, RESOURCES);
 
-    ARMY_ARRAY[item.identifier].push(item);
-    saveToStorage(ARMY_KEY, ARMY_ARRAY);
+    CART_ARRAY[item.identifier].push(item);
+    saveToStorage(ARMY_KEY, CART_ARRAY);
     console.log(`Added ${item.categoryName} to the cart!`);
     displayPurchasedModal();
   } else {

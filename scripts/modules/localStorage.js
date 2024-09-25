@@ -1,4 +1,4 @@
-import { ARMY_ARRAY } from "./army.js";
+import { CART_ARRAY } from "./cart.js";
 import { loadHeader } from "./header.js";
 import { RESOURCES } from "./resources.js";
 
@@ -32,10 +32,10 @@ export function loadFromStorage(key, data) {
       RESOURCES.wood = parsedData.wood;
       console.log(RESOURCES);
     } else if (key === ARMY_KEY) {
-      ARMY_ARRAY.clothing = parsedData.clothing;
-      ARMY_ARRAY.bag = parsedData.bag;
-      ARMY_ARRAY.shoe = parsedData.shoe;
-      console.log(ARMY_ARRAY);
+      CART_ARRAY.clothing = parsedData.clothing;
+      CART_ARRAY.bag = parsedData.bag;
+      CART_ARRAY.shoe = parsedData.shoe;
+      console.log(CART_ARRAY);
     }
   } else {
     console.log(`No data for ${key} in localStorage, initializing...`);
@@ -56,7 +56,7 @@ export function saveToStorage(key, data) {
 
 function initializeData() {
   loadFromStorage(RESOURCE_KEY, RESOURCES);
-  loadFromStorage(ARMY_KEY, ARMY_ARRAY);
+  loadFromStorage(ARMY_KEY, CART_ARRAY);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

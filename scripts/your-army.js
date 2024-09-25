@@ -1,35 +1,47 @@
-import { ARMY_ARRAY } from "./modules/army.js";
-import { loadFromStorage } from "./modules/localStorage.js";
+import { CART_ARRAY } from "./modules/cart.js";
+import { ARMY_KEY, loadFromStorage } from "./modules/localStorage.js";
+import { inputContains } from "./utilities/filterUtil.js";
 
 const clothingContainer = document.getElementById("warrior-container");
 const shoesContainer = document.getElementById("machines-container");
 const bagsContainer = document.getElementById("animals-container");
 const spentOnItems = document.getElementById("worth");
+const filterInput = document.getElementById("filterInput");
+if (filterInput) {
+  filterInput.addEventListener("input", displayArray);
+}
 
 function displayArray() {
-  loadFromStorage("army", ARMY_ARRAY);
+  loadFromStorage(ARMY_KEY, CART_ARRAY);
   let totalSpent = 0;
-  for (const category in ARMY_ARRAY) {
-    const itemArray = ARMY_ARRAY[category];
+
+  // Clear previous content
+  clothingContainer.innerHTML = "";
+  shoesContainer.innerHTML = "";
+  bagsContainer.innerHTML = "";
+
+  for (const category in CART_ARRAY) {
+    const itemArray = CART_ARRAY[category].filter(inputContains);
     let html = "";
+
     itemArray.forEach((item) => {
       html += `
-        <div class="item">
-          <img src="${item.imageURL}" alt="${item.categoryName}" />
-          <h2>${item.categoryName}</h2>
-          <p>Brand: ${item.categoryBrand}</p>
-          <p>Worth:<span class="font-bold"> ${item.priceGold}$ </span></p>
-        </div>
+       <article class="shop-display__card">
+          <img src="${item.imageURL}" class="shop-display__card-image">
+          <h2 class="shop-display__card-name">${item.categoryName}</h2>
+          <h3 class="shop-display__card-brand">${item.categoryBrand}</h3>
+          <h4 class="shop-display__card-price font-semibold text-lg">${item.priceGold.toLocaleString()}.-</h4>
+         </article>   
       `;
       totalSpent += item.priceGold;
     });
 
     if (category === "clothing") {
-      clothingContainer.innerHTML = html;
+      clothingContainer.innerHTML += html;
     } else if (category === "shoe") {
-      shoesContainer.innerHTML = html;
+      shoesContainer.innerHTML += html;
     } else if (category === "bag") {
-      bagsContainer.innerHTML = html;
+      bagsContainer.innerHTML += html;
     }
   }
   spentOnItems.textContent = `$ ${totalSpent.toLocaleString()} $`;

@@ -1,4 +1,4 @@
-export const ARMY_ARRAY = {
+export const CART_ARRAY = {
   clothing: [],
   bag: [],
   shoe: [],
