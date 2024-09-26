@@ -90,7 +90,7 @@ function buyItem(item) {
 function displayPurchasedModal() {
   const modal = document.getElementById("purchasedModal");
 
-  const message = "Purchase Successful! Thank you for your order.";
+  const message = "Added To Cart!";
   document.getElementById("modalMessage").innerText = message;
 
   modal.classList.remove("hidden");
