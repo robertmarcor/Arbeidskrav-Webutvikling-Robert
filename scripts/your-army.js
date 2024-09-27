@@ -1,4 +1,4 @@
-import { CART_ARRAY } from "./modules/cart.js";
+import { cartItems } from "./modules/cart.js";
 import { ARMY_KEY, loadFromStorage } from "./modules/localStorage.js";
 import { inputContains } from "./utilities/filterUtil.js";
 
@@ -8,20 +8,19 @@ const bagsContainer = document.getElementById("animals-container");
 const spentOnItems = document.getElementById("worth");
 const filterInput = document.getElementById("filterInput");
 if (filterInput) {
-  filterInput.addEventListener("input", displayArray);
+  filterInput.addEventListener("input", displayShoppingCart);
 }
 
-function displayArray() {
-  loadFromStorage(ARMY_KEY, CART_ARRAY);
+function displayShoppingCart() {
+  loadFromStorage(ARMY_KEY, cartItems);
   let totalSpent = 0;
 
-  // Clear previous content
   clothingContainer.innerHTML = "";
   shoesContainer.innerHTML = "";
   bagsContainer.innerHTML = "";
 
-  for (const category in CART_ARRAY) {
-    const itemArray = CART_ARRAY[category].filter(inputContains);
+  for (const category in cartItems) {
+    const itemArray = cartItems[category].filter(inputContains);
     let html = "";
 
     itemArray.forEach((item) => {
@@ -47,4 +46,4 @@ function displayArray() {
   spentOnItems.textContent = `$ ${totalSpent.toLocaleString()} $`;
 }
 
-displayArray();
+displayShoppingCart();

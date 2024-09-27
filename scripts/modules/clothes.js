@@ -1,5 +1,5 @@
 const IDENTIFIER = "clothing";
-export const clothingsArray = [
+export const clothingItems = [
   {
     identifier: IDENTIFIER,
     categoryBrand: "Va Vite",

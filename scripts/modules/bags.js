@@ -1,6 +1,6 @@
 const IDENTIFIER = "bag";
 
-export const bagsArray = [
+export const bagItems = [
   {
     identifier: IDENTIFIER,
     categoryBrand: "Even&Odd",

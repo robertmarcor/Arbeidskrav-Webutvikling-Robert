@@ -1,27 +1,22 @@
-import { CART_ARRAY } from "./cart.js";
+import { cartItems } from "./cart.js";
 import { loadHeader } from "./header.js";
 import { RESOURCES } from "./resources.js";
 
 // LocalStorage Key Names
 export const RESOURCE_KEY = "resources";
-export const ARMY_KEY = "army";
+export const CART_KEY = "army";
 
-let resourceDisplay;
+let resourceElement;
 
-async function setResourceDisplay() {
+async function initializeLocalStorage() {
   await loadHeader();
-  resourceDisplay = document.getElementById("resource");
-
-  if (resourceDisplay) {
-    console.log("Header loaded and resourceDisplay element found.");
-    initializeData();
-    updateResourceValue();
-  } else {
-    console.error("resourceDisplay element not found.");
-  }
+  initializeData();
+  resourceElement = document.getElementById("resource");
+  /* TODO, add failsafe to create element if missing */
+  updateResourceValue();
 }
 
-export function loadFromStorage(key, data) {
+export function retrieveDataFromLocalStorage(key, value) {
   console.log("Loading data...");
   const storedData = localStorage.getItem(key);
   if (storedData) {
@@ -31,34 +26,39 @@ export function loadFromStorage(key, data) {
       RESOURCES.metal = parsedData.metal;
       RESOURCES.wood = parsedData.wood;
       console.log(RESOURCES);
-    } else if (key === ARMY_KEY) {
-      CART_ARRAY.clothing = parsedData.clothing;
-      CART_ARRAY.bag = parsedData.bag;
-      CART_ARRAY.shoe = parsedData.shoe;
-      console.log(CART_ARRAY);
+    } else if (key === CART_KEY) {
+      cartItems.clothing = parsedData.clothing;
+      cartItems.bag = parsedData.bag;
+      cartItems.shoe = parsedData.shoe;
+      console.log(cartItems);
     }
   } else {
-    console.log(`No data for ${key} in localStorage, initializing...`);
-    localStorage.setItem(key, JSON.stringify(data));
+    console.log(`No entry for ${key} in localStorage, initializing...`);
+    // Create the data if no data found
+    saveDataToLocalStorage(key, value);
   }
 }
 
 function updateResourceValue() {
-  if (resourceDisplay) {
-    resourceDisplay.textContent = RESOURCES.gold;
+  if (resourceElement) {
+    resourceElement.textContent = RESOURCES.gold;
+    // Add other resources here
+  } else {
+    console.console.error("resource element missing");
   }
 }
 
-export function saveToStorage(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
+export function saveDataToLocalStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
   updateResourceValue();
 }
 
 function initializeData() {
-  loadFromStorage(RESOURCE_KEY, RESOURCES);
-  loadFromStorage(ARMY_KEY, CART_ARRAY);
+  // Probably should add a loop to load all data from localStorage
+  retrieveDataFromLocalStorage(RESOURCE_KEY, RESOURCES);
+  retrieveDataFromLocalStorage(CART_KEY, cartItems);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setResourceDisplay();
+  initializeLocalStorage();
 });

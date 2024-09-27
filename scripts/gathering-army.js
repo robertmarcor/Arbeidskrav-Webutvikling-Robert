@@ -1,39 +1,45 @@
-import { clothingsArray } from "./modules/clothes.js";
-import { bagsArray } from "./modules/bags.js";
-import { shoesArray } from "./modules/shoes.js";
-import { CART_ARRAY } from "./modules/cart.js";
-import {
-  ARMY_KEY,
-  RESOURCE_KEY,
-  saveToStorage,
-} from "./modules/localStorage.js";
 import { RESOURCES } from "./modules/resources.js";
-import { inputContains } from "./utilities/filterUtil.js";
+import { clothingItems } from "./modules/clothes.js";
+import { bagItems } from "./modules/bags.js";
+import { shoeItems } from "./modules/shoes.js";
+import { cartItems } from "./modules/cart.js";
+import {
+  CART_KEY,
+  RESOURCE_KEY,
+  saveDataToLocalStorage,
+} from "./modules/localStorage.js";
+import { matchesFilterByInput } from "./utilities/filterUtil.js";
 
+// For placing html
 const clothingContainer = document.getElementById("warrior-container");
 const shoesContainer = document.getElementById("machines-container");
 const bagsContainer = document.getElementById("animals-container");
 
-const filterInput = document.getElementById("filterInput");
-if (filterInput) {
-  filterInput.addEventListener("input", displayItemsForSale);
-}
+// Checks if theres a inputfield in the DOM
+getFilterInputField();
 
 const itemsForSale = [
-  { array: clothingsArray, container: clothingContainer },
-  { array: bagsArray, container: shoesContainer },
-  { array: shoesArray, container: bagsContainer },
+  { items: clothingItems, container: clothingContainer },
+  { items: bagItems, container: shoesContainer },
+  { items: shoeItems, container: bagsContainer },
 ];
 
 function displayItemsForSale() {
-  // Clear previous content
   clothingContainer.innerHTML = "";
   shoesContainer.innerHTML = "";
   bagsContainer.innerHTML = "";
 
-  itemsForSale.forEach(({ array, container }, arrayIndex) => {
-    const filteredItems = array.filter(inputContains);
-    filteredItems.forEach((item, itemIndex) => {
+  /**
+   * Loops through an array of items and renders HTML dynamically
+   * @param {Array} items - items to place
+   * @param {HTMLElement} container - where the items should be placed
+   */
+  itemsForSale.forEach(({ items, container }, arrayIndex) => {
+    //Creates a new array and filters items if theres input from the user in the inputField
+    let filteredItemsForSale = items.filter(matchesFilterByInput);
+
+    // itemIndex used adding buttonsHandlers
+    filteredItemsForSale.forEach((item, itemIndex) => {
       let html = "";
       html += ` 
       <article class="shop-display__card">
@@ -50,49 +56,62 @@ function displayItemsForSale() {
         <div class="flex justify-between py-2"> 
           <h4 class="shop-display__card-price font-semibold text-lg">${item.priceGold.toLocaleString()}.-</h4>
           <button class="bg-black text-white px-4" 
-          id="buy-${item.identifier}-${arrayIndex}-${itemIndex}"> + Add
+          id="buy-button-${item.identifier}-${itemIndex}"> + Add
           </button>
         </div>
       </article>
     `;
-
       container.insertAdjacentHTML("beforeend", html);
-      addButtons(item, `buy-${item.identifier}-${arrayIndex}-${itemIndex}`);
+      attachButtonHandlers(item, `buy-button-${item.identifier}-${itemIndex}`); // Button naming example: buy-button-clothing-1
     });
   });
 }
 displayItemsForSale();
 
-function addButtons(item, buttonId) {
+// Add unique buttons to each item so we can target selected object
+function attachButtonHandlers(item, buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener("click", () => {
-    buyItem(item);
+    buySelected(item);
   });
 }
 
-function canAfford(item) {
+function canPurchase(item) {
   return RESOURCES.gold >= item.priceGold;
 }
-function buyItem(item) {
-  if (canAfford(item)) {
-    RESOURCES.gold -= item.priceGold;
-    saveToStorage(RESOURCE_KEY, RESOURCES);
 
-    CART_ARRAY[item.identifier].push(item);
-    saveToStorage(ARMY_KEY, CART_ARRAY);
+function buySelected(item) {
+  if (canPurchase(item)) {
+    RESOURCES.gold -= item.priceGold;
+    saveDataToLocalStorage(RESOURCE_KEY, RESOURCES);
+
+    cartItems[item.identifier].push(item);
+    saveDataToLocalStorage(CART_KEY, cartItems);
     console.log(`Added ${item.categoryName} to the cart!`);
-    displayPurchasedModal();
+
+    displayPopupModal();
   } else {
-    console.log("Not enough resources to buy this item.");
+    console.log("Not enough to buy this item.");
+    displayPopupModal("Not enough Bonus");
   }
 }
 
-function displayPurchasedModal() {
-  const modal = document.getElementById("purchasedModal");
+function getFilterInputField() {
+  const filterInput = document.getElementById("filterInput");
+  if (filterInput) {
+    filterInput.addEventListener("input", displayItemsForSale);
+  } else {
+    console.log("No Input field for filter present");
+    /* Should ther be one? add if missing maybe? */
+  }
+}
 
-  const message = "Added To Cart!";
+function displayPopupModal(text) {
+  const modal = document.getElementById("popup-modal");
+
+  let message = "Added To Cart!";
+  if (text) message = text;
   document.getElementById("modalMessage").innerText = message;
-
   modal.classList.remove("hidden");
 
   setTimeout(() => {

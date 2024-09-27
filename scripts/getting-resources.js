@@ -1,4 +1,7 @@
-import { RESOURCE_KEY, saveToStorage } from "./modules/localStorage.js";
+import {
+  RESOURCE_KEY,
+  saveDataToLocalStorage,
+} from "./modules/localStorage.js";
 import { RESOURCES } from "./modules/resources.js";
 
 /**
@@ -8,12 +11,13 @@ import { RESOURCES } from "./modules/resources.js";
 function addResource(resourceType) {
   const validResourceTypes = ["gold", "metal", "wood"];
   if (!validResourceTypes.includes(resourceType)) return;
-  RESOURCES[resourceType] += Math.floor(Math.random() * 10);
-  saveToStorage(RESOURCE_KEY, RESOURCES);
+
+  RESOURCES[resourceType] += Math.floor(Math.random() * 101);
+  saveDataToLocalStorage(RESOURCE_KEY, RESOURCES);
 }
 
 /**
- * Game logic
+ * JS Canvas and Game logic below
  */
 
 // Select canvas dimensions

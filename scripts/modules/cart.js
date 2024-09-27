@@ -1,4 +1,4 @@
-export const CART_ARRAY = {
+export const cartItems = {
   clothing: [],
   bag: [],
   shoe: [],

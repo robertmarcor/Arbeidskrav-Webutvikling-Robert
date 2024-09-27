@@ -1,6 +1,6 @@
 const IDENTIFIER = "shoe";
 
-export const shoesArray = [
+export const shoeItems = [
   {
     identifier: IDENTIFIER,
     categoryBrand: "Vagabond",
