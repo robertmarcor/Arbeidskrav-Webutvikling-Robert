@@ -52,13 +52,15 @@ function displayItemsForSale() {
         <h3 class="shop-display__card-brand text-gray-800">${
           item.categoryBrand
         }</h3>
-        <h2 class="shop-display__card-name">${item.categoryName}</h2>
-        <div class="flex justify-between py-2"> 
-          <h4 class="shop-display__card-price font-semibold text-lg">${item.priceGold.toLocaleString()}.-</h4>
-          <button class="bg-black text-white px-4" 
-          id="buy-button-${item.identifier}-${itemIndex}"> + Add
-          </button>
-        </div>
+          <h2 class="shop-display__card-name min-h-12 md:min-h-0">${
+            item.categoryName
+          }</h2>
+          <div class="flex justify-between py-2"> 
+            <h4 class="shop-display__card-price font-semibold text-lg">${item.priceGold.toLocaleString()}.-</h4>
+            <button class="bg-black text-white px-4 whitespace-nowrap" 
+            id="buy-button-${item.identifier}-${itemIndex}"> + Add
+            </button>
+          </div>
       </article>
     `;
       container.insertAdjacentHTML("beforeend", html);
