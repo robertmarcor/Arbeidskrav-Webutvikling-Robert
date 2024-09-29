@@ -8,7 +8,10 @@ import {
   RESOURCE_KEY,
   saveDataToLocalStorage,
 } from "./modules/localStorage.js";
-import { matchesFilterByInput } from "./utilities/filterUtil.js";
+import {
+  matchFieldsToInput,
+  getFilterInputField,
+} from "./utilities/filterUtil.js";
 
 // For placing html
 const clothingContainer = document.getElementById("warrior-container");
@@ -16,7 +19,7 @@ const shoesContainer = document.getElementById("machines-container");
 const bagsContainer = document.getElementById("animals-container");
 
 // Checks if theres a inputfield in the DOM
-getFilterInputField();
+getFilterInputField(displayItemsForSale);
 
 const itemsForSale = [
   { items: clothingItems, container: clothingContainer },
@@ -36,7 +39,10 @@ function displayItemsForSale() {
    */
   itemsForSale.forEach(({ items, container }, arrayIndex) => {
     //Creates a new array and filters items if theres input from the user in the inputField
-    let filteredItemsForSale = items.filter(matchesFilterByInput);
+
+    let filteredItemsForSale = items.filter(
+      matchFieldsToInput("identifier", "categoryBrand", "categoryName")
+    );
 
     // itemIndex used adding buttonsHandlers
     filteredItemsForSale.forEach((item, itemIndex) => {
@@ -95,16 +101,6 @@ function buySelected(item) {
   } else {
     console.log("Not enough to buy this item.");
     displayPopupModal("Not enough Bonus");
-  }
-}
-
-function getFilterInputField() {
-  const filterInput = document.getElementById("filterInput");
-  if (filterInput) {
-    filterInput.addEventListener("input", displayItemsForSale);
-  } else {
-    console.log("No Input field for filter present");
-    /* Should ther be one? add if missing maybe? */
   }
 }
 

@@ -1,18 +1,22 @@
 import { cartItems } from "./modules/cart.js";
-import { ARMY_KEY, loadFromStorage } from "./modules/localStorage.js";
-import { inputContains } from "./utilities/filterUtil.js";
+import {
+  CART_KEY,
+  retrieveDataFromLocalStorage,
+} from "./modules/localStorage.js";
+import {
+  getFilterInputField,
+  matchFieldsToInput,
+} from "./utilities/filterUtil.js";
 
 const clothingContainer = document.getElementById("warrior-container");
-const shoesContainer = document.getElementById("machines-container");
-const bagsContainer = document.getElementById("animals-container");
+const bagsContainer = document.getElementById("machines-container");
+const shoesContainer = document.getElementById("animals-container");
 const spentOnItems = document.getElementById("worth");
-const filterInput = document.getElementById("filterInput");
-if (filterInput) {
-  filterInput.addEventListener("input", displayShoppingCart);
-}
+
+getFilterInputField(displayShoppingCart);
 
 function displayShoppingCart() {
-  loadFromStorage(ARMY_KEY, cartItems);
+  retrieveDataFromLocalStorage(CART_KEY, cartItems);
   let totalSpent = 0;
 
   clothingContainer.innerHTML = "";
@@ -20,10 +24,17 @@ function displayShoppingCart() {
   bagsContainer.innerHTML = "";
 
   for (const category in cartItems) {
-    const itemArray = cartItems[category].filter(inputContains);
+    const filteredCartItems = cartItems[category].filter(
+      matchFieldsToInput(
+        "identifier",
+        "categoryBrand",
+        "categoryName",
+        "searchTerms"
+      )
+    );
     let html = "";
 
-    itemArray.forEach((item) => {
+    filteredCartItems.forEach((item) => {
       html += `
        <article class="shop-display__card">
           <img src="${item.imageURL}" class="shop-display__card-image">
@@ -45,5 +56,4 @@ function displayShoppingCart() {
   }
   spentOnItems.textContent = `$ ${totalSpent.toLocaleString()} $`;
 }
-
 displayShoppingCart();

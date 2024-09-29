@@ -18,7 +18,7 @@ export async function loadHeader() {
   return Promise.resolve();
 }
 
-function createHeader() {
+/* function createHeader() {
   const header = document.createElement("header");
   header.innerHTML = `<header>
     <div class="header-container">
@@ -38,4 +38,4 @@ function createHeader() {
     </nav>
 </header>`;
   document.body.insertAdjacentElement("afterbegin", header);
-}
+} */
